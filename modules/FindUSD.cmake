@@ -33,7 +33,6 @@ find_path(USD_INCLUDE_DIR pxr/pxr.h
         NO_CMAKE_FIND_ROOT_PATH
     DOC "USD include directory")
 
-
 if(WIN32)
     set(LIB_EXT "lib")
     set(DYLIB_EXT "dll")
@@ -45,7 +44,8 @@ else()
     set(DYLIB_EXT "so")
 endif()
 
-find_path(USD_LIBRARY_DIR libusd.${DYLIB_EXT}
+find_path(USD_LIBRARY_DIR 
+    NAMES libusd.${LIB_EXT} usd_ms.${LIB_EXT}
     PATHS ${USD_INCLUDE_DIR}/../lib
     NO_DEFAULT_PATH
     NO_CMAKE_ENVIRONMENT_PATH
@@ -65,6 +65,8 @@ find_file(USD_GENSCHEMA
     NO_CMAKE_SYSTEM_PATH
     NO_CMAKE_FIND_ROOT_PATH
     DOC "USD Gen schema application")
+
+# note that bin dir won't exist in the case that USD was built monolithically
 
 find_path(USD_BIN_DIR usdview
     PATHS ${USD_INCLUDE_DIR}/../bin
@@ -131,12 +133,41 @@ endif()
 if (Houdini_FOUND)
 endif()
 
-set(USD_LIB_NAMES
-    arch gf js plug tf tracelite vt work
-    cameraUtil garch glf hd hdSt hdx hf pxOsd hdStream
-    ar kind pcp sdf usd usdGeom usdHydra usdLux usdRi usdShade usdSkel usdUI usdUtils
-    usdImaging usdImagingGL
+# prefer the monolithic static library, if it can be found
+find_library(USD_MS_LIB_RELEASE usd_ms.${LIB_EXT}
+    HINTS ${USD_INCLUDE_DIR}/..
+
+    PATHS
+        ${USD_LOCATION}
+        ${USD_ROOT}
+        /usr
+        /usr/local
+        /sw
+        /opt/local
+
+    PATH_SUFFIXES
+        /lib
+
+    NO_DEFAULT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_PATH
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
+    NO_CMAKE_FIND_ROOT_PATH
+
+    DOC "USD library ${LIB}"
 )
+
+if (USD_MS_LIB_RELEASE)
+    set(USD_LIB_NAMES usd_ms)
+else()
+    set(USD_LIB_NAMES
+        arch gf js plug tf tracelite vt work
+        cameraUtil garch glf hd hdSt hdx hf pxOsd hdStream
+        ar kind pcp sdf usd usdGeom usdHydra usdLux usdRi usdShade usdSkel usdUI usdUtils
+        usdImaging usdImagingGL
+    )
+endif()
 
 if(Embree_FOUND)
     set(USD_LIB_NAMES ${USD_LIB_NAMES} hdEmbree)
@@ -168,17 +199,18 @@ foreach(_lib ${USD_LIB_NAMES})
         NO_CMAKE_SYSTEM_PATH
         NO_CMAKE_FIND_ROOT_PATH
 
-        DOC "USD library ${LIB}")
+        DOC "USD library ${LIB}"
+    )
 
-        if(USD_${_lib}_LIB_RELEASE)
-            list(APPEND USD_LIBRARIES "${USD_${_lib}_LIB_RELEASE}")
-            set(USD_${_lib}_FOUND TRUE)
-            set(USD_${_lib}_LIBRARY "${USD_${_lib}_LIB_RELEASE}")
-            list(APPEND USD_LIBRARIES "${USD_${_lib}_LIBRARY}")
-            mark_as_advanced(USD_${_lib}_LIB_RELEASE)
-        else()
-            set(USD_${_lib}_FOUND FALSE)
-        endif()
+    if(USD_${_lib}_LIB_RELEASE)
+        list(APPEND USD_LIBRARIES "${USD_${_lib}_LIB_RELEASE}")
+        set(USD_${_lib}_FOUND TRUE)
+        set(USD_${_lib}_LIBRARY "${USD_${_lib}_LIB_RELEASE}")
+        list(APPEND USD_LIBRARIES "${USD_${_lib}_LIBRARY}")
+        mark_as_advanced(USD_${_lib}_LIB_RELEASE)
+    else()
+        set(USD_${_lib}_FOUND FALSE)
+    endif()
 
 endforeach()
 
