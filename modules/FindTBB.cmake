@@ -105,9 +105,14 @@ if(NOT TBB_FOUND)
 
   # Define the search directories based on the current platform
   if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(TBB_DEFAULT_SEARCH_DIR "C:/Program Files/Intel/TBB"
-                               "C:/Program Files (x86)/Intel/TBB")
-    # TODO: Set the proper suffix paths based on compiler introspection.
+    set(TBB_DEFAULT_SEARCH_DIR 
+          ${TBB_ROOT_DIR}
+          ${LAB_PACKAGE_ROOT}
+          "C:/Program Files/Intel/TBB"
+          "C:/Program Files (x86)/Intel/TBB")
+
+    set(TBB_LIB_PATH_SUFFIX "lib")
+    set(TBB_DEBUG_LIB_PATH_SUFFIX "debug/lib")
 
   elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     # OS X
@@ -141,7 +146,13 @@ if(NOT TBB_FOUND)
   find_path(TBB_INCLUDE_DIRS tbb/tbb.h
       HINTS ${TBB_INCLUDE_DIR} ${TBB_SEARCH_DIR}
       PATHS ${TBB_DEFAULT_SEARCH_DIR}
-      PATH_SUFFIXES include)
+      PATH_SUFFIXES include
+      NO_DEFAULT_PATH
+      NO_CMAKE_ENVIRONMENT_PATH
+      NO_CMAKE_PATH
+      NO_SYSTEM_ENVIRONMENT_PATH
+      NO_CMAKE_SYSTEM_PATH
+      NO_CMAKE_FIND_ROOT_PATH)
 
   ##################################
   # Find TBB components
@@ -153,12 +164,27 @@ if(NOT TBB_FOUND)
     find_library(TBB_${_comp}_LIBRARY_RELEASE ${_comp}
         HINTS ${TBB_LIBRARY} ${TBB_SEARCH_DIR}
         PATHS ${TBB_DEFAULT_SEARCH_DIR}
-        PATH_SUFFIXES "${TBB_LIB_PATH_SUFFIX}")
+        PATH_SUFFIXES 
+          ${TBB_LIB_PATH_SUFFIX}
+        NO_DEFAULT_PATH
+        NO_CMAKE_ENVIRONMENT_PATH
+        NO_CMAKE_PATH
+        NO_SYSTEM_ENVIRONMENT_PATH
+        NO_CMAKE_SYSTEM_PATH
+        NO_CMAKE_FIND_ROOT_PATH)
 
     find_library(TBB_${_comp}_LIBRARY_DEBUG ${_comp}_debug
         HINTS ${TBB_LIBRARY} ${TBB_SEARCH_DIR}
         PATHS ${TBB_DEFAULT_SEARCH_DIR} ENV LIBRARY_PATH
-        PATH_SUFFIXES "${TBB_LIB_PATH_SUFFIX}")
+        PATH_SUFFIXES 
+          ${TBB_DEBUG_LIB_PATH_SUFFIX}
+          ${TBB_LIB_PATH_SUFFIX}
+        NO_DEFAULT_PATH
+        NO_CMAKE_ENVIRONMENT_PATH
+        NO_CMAKE_PATH
+        NO_SYSTEM_ENVIRONMENT_PATH
+        NO_CMAKE_SYSTEM_PATH
+        NO_CMAKE_FIND_ROOT_PATH)
 
 
     # Set the library to be used for the component
