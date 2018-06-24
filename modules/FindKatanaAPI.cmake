@@ -31,6 +31,8 @@
 # KATANA_API_SOURCE_DIR    Path to the Katana API source directories
 # KATANA_API_VERSION       Katana API version
 
+include_guard()
+
 find_path(KATANA_API_BASE_DIR
     NAMES
         katana

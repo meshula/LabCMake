@@ -174,6 +174,7 @@ function(_lab_library_detail NAME)
             PREFIX "${args_PREFIX}"
             SUFFIX "${args_SUFFIX}"
             PUBLIC_HEADER "${args_PUBLIC_HEADERS}"
+            OUTPUT_NAME "${NAME}"
             OUTPUT_NAME_DEBUG "${NAME}_d"
     )
 

@@ -36,6 +36,8 @@
 #
 #=============================================================================
 
+include_guard()
+
 if (APPLE)
     set (EMBREE_LIB_NAME libembree.dylib)
 elseif (UNIX)

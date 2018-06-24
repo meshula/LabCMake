@@ -11,6 +11,8 @@
 # LABPHYSICS_DYLIBS_RELEASE
 # LABPHYSICS_DYLIBS_DEBUG
 
+include_guard()
+
 include(FindPackageHandleStandardArgs)
 
 find_path(LABPHYSICS_INCLUDE_DIR LabPhysics/PhysicsEngine.h

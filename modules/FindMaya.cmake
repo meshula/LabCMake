@@ -26,6 +26,8 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
+include_guard()
+
 if(APPLE)
     find_path(MAYA_BASE_DIR
             ../../devkit/include/maya/MFn.h

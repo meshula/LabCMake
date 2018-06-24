@@ -29,6 +29,8 @@
 # GLEW_LIBRARY
 #
 
+include_guard()
+
 include(FindPackageHandleStandardArgs)
 
 if (WIN32)
@@ -142,3 +144,12 @@ find_package_handle_standard_args(GLEW
         GLEW_INCLUDE_DIR
         GLEW_LIBRARY
 )
+
+iF (GLEW_FOUND)
+
+    add_library(GLEW::Shared SHARED IMPORTED)
+    set_property(TARGET GLEW::Shared APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+    set_target_properties(GLEW::Shared PROPERTIES IMPORTED_IMPLIB_RELEASE ${GLEW_LIBRARY})
+    set_property(TARGET GLEW::Shared APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${GLEW_INCLUDE_DIR})
+
+endif()

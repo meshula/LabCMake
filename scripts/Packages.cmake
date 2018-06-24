@@ -1,15 +1,12 @@
 
+include_guard()
+
 # All the things that are not required to use the same values as USD
 set(FMT_LOCATION ${LOCAL_ROOT})
 set(GLFW_LOCATION ${LOCAL_ROOT})
 set(GLM_ROOT_DIR ${LOCAL_ROOT})
-set(LABCMD_LOCATION ${LOCAL_ROOT})
-set(LABRENDER_LOCATION ${LOCAL_ROOT})
-set(LABPHYSICS_LOCATION ${LOCAL_ROOT})
 set(TBB_ROOT_DIR ${LOCAL_ROOT})
 set(USD_ROOT ${LOCAL_ROOT})
-
-message(INFO, "XXXXXX" ${TBB_ROOT_DIR})
 
 link_directories(${LOCAL_ROOT}/lib)
 
@@ -31,9 +28,6 @@ endif()
 find_package(OpenGL)
 find_package(GLFW)
 find_package(GLM)
-find_package(LabCmd)
-find_package(LabRender)
-find_package(LabPhysics)
 find_package(Fmt)
 find_package(TBB)
 find_package(USD)

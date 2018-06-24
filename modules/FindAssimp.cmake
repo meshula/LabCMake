@@ -11,6 +11,8 @@
 # Assimp_LIBRARIES
 # Assimp_BINARY (win32 only)
 
+include_guard()
+
 include(FindPackageHandleStandardArgs)
 
 find_path(Assimp_INCLUDE_DIR assimp/Importer.hpp

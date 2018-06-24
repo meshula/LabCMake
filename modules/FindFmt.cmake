@@ -2,6 +2,8 @@
 # author: Nick Porcino
 # license: MIT
 
+include_guard()
+
 include(FindPackageHandleStandardArgs)
 
 find_path(FMT_INCLUDE_DIR fmt/format.h

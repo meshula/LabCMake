@@ -11,9 +11,7 @@
 # LABRENDER_DYLIBS_RELEASE
 # LABRENDER_DYLIBS_DEBUG
 
-if (TARGET LabRender::Core)
-    return()
-endif()
+include_guard()
 
 include(FindPackageHandleStandardArgs)
 

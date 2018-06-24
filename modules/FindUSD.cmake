@@ -2,6 +2,8 @@
 # author: Nick Porcino
 # license: MIT
 
+include_guard()
+
 include(FindPackageHandleStandardArgs)
 
 if(EXISTS "$ENV{USD_ROOT}")

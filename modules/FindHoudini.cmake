@@ -61,6 +61,8 @@
 #  HOUDINI_UI_LIBRARY
 #  HOUDINI_UT_LIBRARY
 
+include_guard()
+
 find_path(HOUDINI_BASE_DIR
     NAMES
         houdini

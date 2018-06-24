@@ -14,6 +14,8 @@
 # - https://bitbucket.org/alfonse/gltut/src/28636298c1c0/glm-0.9.0.7/FindGLM.cmake
 #
 
+include_guard()
+
 # Additional modules
 include(FindPackageHandleStandardArgs)
 

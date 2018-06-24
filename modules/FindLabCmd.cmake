@@ -2,9 +2,7 @@
 # author: Nick Porcino
 # license: MIT
 
-if (TARGET LabCmd::Core)
-    return()
-endif()
+include_guard()
 
 include(FindPackageHandleStandardArgs)
 
@@ -85,12 +83,10 @@ find_package_handle_standard_args(LABCMD
     REQUIRED_VARS LABCMD_LIBRARIES LABCMD_LIBRARIES_DEBUG LABCMD_INCLUDE_DIR)
 
 iF (LABCMD_FOUND)
-
     add_library(LabCmd::Core SHARED IMPORTED)
     set_property(TARGET LabCmd::Core APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
     set_property(TARGET LabCmd::Core APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
     set_target_properties(LabCmd::Core PROPERTIES IMPORTED_IMPLIB_RELEASE ${LabCmd_LIBRARY})
     set_target_properties(LabCmd::Core PROPERTIES IMPORTED_IMPLIB_DEBUG   ${LabCmd_LIBRARY_DEBUG})
     set_property(TARGET LabCmd::Core APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${LABCMD_INCLUDE_DIR})
-
 endif()
