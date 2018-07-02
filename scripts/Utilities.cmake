@@ -47,6 +47,7 @@ function(_lab_library_detail NAME)
         SUBDIR
         SUFFIX
         TYPE
+        ALIAS
         PRECOMPILED_HEADERS
         PRECOMPILED_HEADER_NAME
     )
@@ -189,6 +190,10 @@ function(_lab_library_detail NAME)
             ${args_PRIVATE_DEFINITIONS}
     )
 
+    if (args_ALIAS)
+        add_library(${args_ALIAS} ALIAS ${NAME})
+    endif()
+
     # Copy headers to the build directory and include from there and from
     # external packages.
     install(
@@ -224,12 +229,14 @@ function(_lab_library_detail NAME)
     # Set up the install.
     #
 
-    install(
-        FILES
-            $<TARGET_PDB_FILE:LabCmd>
-        DESTINATION
-            bin OPTIONAL
-    )
+    if (args_TYPE STREQUAL "SHARED")
+        install(
+            FILES
+                $<TARGET_PDB_FILE:${NAME}>
+            DESTINATION
+                bin OPTIONAL
+        )
+    endif()
 
     install(
         TARGETS ${NAME}
@@ -256,6 +263,7 @@ function(lab_library NAME)
     )
     set(oneValueArgs
         TYPE
+        ALIAS
         PRECOMPILED_HEADER_NAME
     )
     set(multiValueArgs
@@ -283,6 +291,7 @@ function(lab_library NAME)
         get_property(help CACHE LAB_STATIC_LIBS PROPERTY HELPSTRING)
         list(APPEND LAB_STATIC_LIBS ${NAME})
         set(LAB_STATIC_LIBS "${LAB_STATIC_LIBS}" CACHE INTERNAL "${help}")
+        set(suffix ${CMAKE_STATIC_LIBRARY_SUFFIX})
     else()
         # If the caller didn't specify the library type then choose the
         # type now.
@@ -313,6 +322,7 @@ function(lab_library NAME)
         TYPE "${args_TYPE}"
         PREFIX "${prefix}"
         SUFFIX "${suffix}"
+        ALIAS "${args_ALIAS}"
         SUBDIR "${subdir}"
         CPPFILES "${args_CPPFILES};${${NAME}_CPPFILES}"
         PUBLIC_HEADERS "${args_PUBLIC_HEADERS};${${NAME}_PUBLIC_HEADERS}"
@@ -322,7 +332,7 @@ function(lab_library NAME)
         RESOURCE_FILES "${args_RESOURCE_FILES}"
         PRECOMPILED_HEADERS "${pch}"
         PRECOMPILED_HEADER_NAME "${args_PRECOMPILED_HEADER_NAME}"
-        LIB_INSTALL_PREFIX_RESULT libInstallPrefix
+        LIB_INSTALL_PREFIX_RESULT ${libInstallPrefix}
     )
 endfunction()
 

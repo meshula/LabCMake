@@ -15,16 +15,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     find_library(M_LIB m)
 endif()
 
-# --z
-if (WIN32)
-    find_file(Z_BINARY_RELEASE
-        NAMES
-            zlib.dll
-        HINTS
-            "${LOCAL_ROOT}/bin"
-        DOC "The z library")
-endif()
-
+find_package(Assimp)
 find_package(OpenGL)
 find_package(GLFW)
 find_package(GLM)
@@ -34,8 +25,6 @@ find_package(USD)
 
 set(USD_LOCATION "${USD_INCLUDE_DIR}/..")
 set(GLEW_LOCATION ${USD_LOCATION})
-
-set(LAB_BOOST_COMPONENTS system)
 
 if (LAB_BOOST_VCPKG)
     unset(Boost_USE_STATIC_LIBS)
@@ -52,9 +41,11 @@ else()
     set(Boost_USE_STATIC_LIBS OFF)
     set(Boost_USE_MULTITHREADED ON)
     set(Boost_USE_STATIC_RUNTIME OFF)
-    list(APPEND LAB_BOOST_COMPONENTS python)
 endif()
-find_package(Boost COMPONENTS system ${LAB_BOOST_COMPONENTS})
+find_package(Boost 
+    COMPONENTS system
+    OPTIONAL_COMPONENTS python)
+
 include_directories(${Boost_INCLUDE_DIR})
 
 find_package(GLEW)

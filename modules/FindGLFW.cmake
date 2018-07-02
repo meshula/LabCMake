@@ -14,20 +14,23 @@ include_guard()
 include(FindPackageHandleStandardArgs)
 
 find_path(GLFW_INCLUDE_DIR GLFW/glfw3.h
+    HINTS
+        ${LAB_PACKAGE_ROOT}
 
     PATHS
-    ${GLFW_LOCATION}
-    $ENV{GLFW_DIR}
-    /usr
-    /usr/local
-    /usr/include/GL
-    /sw
-    /opt/local
-    /opt/graphics/OpenGL
-    /opt/graphics/OpenGL/contrib/libglfw
+        ${GLFW_LOCATION}
+        ${LAB_PACKAGE_ROOT}
+        $ENV{GLFW_DIR}
+        /usr
+        /usr/local
+        /usr/include/GL
+        /sw
+        /opt/local
+        /opt/graphics/OpenGL
+        /opt/graphics/OpenGL/contrib/libglfw
 
     PATH_SUFFIXES
-    /include
+        /include
 
     DOC "The directory where GLFW/glfw.h resides")
 
@@ -51,7 +54,7 @@ endif()
 set(GLFW_NAMES glfw3 glfw)
 set(GLFW_DEBUG_NAMES glfw3d glfwd)
 if(WIN32)
-    option(GLFW_SHARED "Use shared GLFW library (DLL)" OFF)
+    option(GLFW_SHARED "Use shared GLFW library (DLL)" ON)
     if(GLFW_SHARED)
         set(GLFW_NAMES glfw3dll glfwdll)
         set(GLFW_DEBUG_NAMES glfw3ddll glfwddll)
@@ -66,6 +69,7 @@ find_library(GLFW_LIBRARY_RELEASE NAMES ${GLFW_NAMES}
 
     HINTS
     ${GLFW_INCLUDE_DIR}/..
+    ${LAB_PACKAGE_ROOT}
 
     PATHS
     $ENV{GLFW_DIR}
@@ -95,6 +99,7 @@ find_library(GLFW_LIBRARY_DEBUG NAMES ${GLFW_DEBUG_NAMES}
 
     HINTS
     ${GLFW_INCLUDE_DIR}/..
+    ${LAB_PACKAGE_ROOT}
 
     PATHS
     ${GLFW_LOCATION}
