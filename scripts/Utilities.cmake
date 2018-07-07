@@ -291,8 +291,7 @@ function(lab_library NAME)
         get_property(help CACHE LAB_STATIC_LIBS PROPERTY HELPSTRING)
         list(APPEND LAB_STATIC_LIBS ${NAME})
         set(LAB_STATIC_LIBS "${LAB_STATIC_LIBS}" CACHE INTERNAL "${help}")
-        set(suffix ${CMAKE_STATIC_LIBRARY_SUFFIX})
-    else()
+   else()
         # If the caller didn't specify the library type then choose the
         # type now.
         if("x${args_TYPE}" STREQUAL "x")
@@ -306,11 +305,12 @@ function(lab_library NAME)
         endif()
 
         set(prefix "${LAB_LIB_PREFIX}")
-        if(args_TYPE STREQUAL "STATIC")
-            set(suffix ${CMAKE_STATIC_LIBRARY_SUFFIX})
-        else()
-            set(suffix ${CMAKE_SHARED_LIBRARY_SUFFIX})
-        endif()
+    endif()
+
+    if(args_TYPE STREQUAL "STATIC")
+        set(suffix ${CMAKE_STATIC_LIBRARY_SUFFIX})
+    else()
+        set(suffix ${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
 
     set(pch "ON")

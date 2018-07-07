@@ -50,7 +50,7 @@ function(lab_default_definitions PROJ)
         if (MSVC_IDE)
             # hack to get around the "Debug" and "Release" directories cmake tries to add on Windows
             #set_target_properties(LabRender PROPERTIES PREFIX "../")
-            set_target_properties(${PROJ} PROPERTIES IMPORT_PREFIX "../")
+            #set_target_properties(${PROJ} PROPERTIES IMPORT_PREFIX "../")
         endif()
     elseif (APPLE)
         target_compile_definitions(${PROJ} PUBLIC PLATFORM_DARWIN)

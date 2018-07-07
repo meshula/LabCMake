@@ -69,3 +69,12 @@ endforeach()
 
 find_package_handle_standard_args(FMT
     REQUIRED_VARS FMT_LIBRARIES FMT_INCLUDE_DIR)
+
+iF (FMT_FOUND)
+    add_library(Fmt::Format SHARED IMPORTED)
+    set_property(TARGET Fmt::Format APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+    set_property(TARGET Fmt::Format APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+    set_target_properties(Fmt::Format PROPERTIES IMPORTED_IMPLIB_RELEASE ${fmt_LIBRARY})
+    set_target_properties(Fmt::Format PROPERTIES IMPORTED_IMPLIB_DEBUG   ${fmt_LIBRARY_DEBUG})
+    set_property(TARGET Fmt::Format APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${FMT_INCLUDE_DIR})
+endif()
