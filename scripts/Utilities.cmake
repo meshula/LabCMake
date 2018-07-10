@@ -205,11 +205,11 @@ function(_lab_library_detail NAME)
     )
 
     target_include_directories(${NAME}
-        PRIVATE
-            "${CMAKE_BINARY_DIR}/include"
-            "${CMAKE_BINARY_DIR}/${LAB_INSTALL_SUBDIR}/include"
         PUBLIC
             ${args_INCLUDE_DIRS}
+#        PRIVATE
+#            "${CMAKE_BINARY_DIR}/include"
+#            "${CMAKE_BINARY_DIR}/${LAB_INSTALL_SUBDIR}/include"
     )
 
     target_link_libraries(${NAME} ${args_LIBRARIES})
