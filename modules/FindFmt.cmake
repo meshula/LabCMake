@@ -23,10 +23,11 @@ set(FMT_LIB_NAMES fmt)
 
 foreach(LIB ${FMT_LIB_NAMES})
     find_library(FMT_${LIB}_LIB_RELEASE ${LIB}
-        HINTS ${LABCMD_INCLUDE_DIR}/..
+        HINTS 
+        ${LABCMD_INCLUDE_DIR}/..
+        ${FMT_LOCATION}
 
         PATHS
-        ${FMT_LOCATION}
         /usr
         /usr/local
         /sw
@@ -34,6 +35,7 @@ foreach(LIB ${FMT_LIB_NAMES})
 
         PATH_SUFFIXES
         /lib
+        
         DOC "Fmt library ${LIB}")
 
         if (FMT_${LIB}_LIB_RELEASE)
@@ -46,10 +48,12 @@ foreach(LIB ${FMT_LIB_NAMES})
         endif()
 
     find_library(FMT_${LIB}_LIB_DEBUG ${LIB}d
-        HINTS ${FMT_INCLUDE_DIR}/..
+        HINTS 
+        ${FMT_LOCATION}
+        ${FMT_INCLUDE_DIR}/../debug
+        ${FMT_INCLUDE_DIR}/..
 
         PATHS
-        ${FMT_LOCATION}
         /usr
         /usr/local
         /sw
@@ -57,6 +61,7 @@ foreach(LIB ${FMT_LIB_NAMES})
 
         PATH_SUFFIXES
         /lib
+
         DOC "Fmt library ${LIB}")
 
         if (FMT_${LIB}_LIB_DEBUG)
