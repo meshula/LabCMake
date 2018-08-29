@@ -161,6 +161,8 @@ find_path(MAYA_DEVKIT_INC_DIR
         "${MAYA_BASE_DIR}"
     PATH_SUFFIXES
         ../../devkit/plug-ins/
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
     DOC
         "Maya's devkit headers path"
 )
