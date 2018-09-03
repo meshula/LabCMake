@@ -23,7 +23,7 @@ set(FMT_LIB_NAMES fmt)
 
 foreach(LIB ${FMT_LIB_NAMES})
     find_library(FMT_${LIB}_LIB_RELEASE ${LIB}
-        HINTS 
+        HINTS
         ${LABCMD_INCLUDE_DIR}/..
         ${FMT_LOCATION}
 
@@ -35,7 +35,7 @@ foreach(LIB ${FMT_LIB_NAMES})
 
         PATH_SUFFIXES
         /lib
-        
+
         DOC "Fmt library ${LIB}")
 
         if (FMT_${LIB}_LIB_RELEASE)
@@ -48,7 +48,7 @@ foreach(LIB ${FMT_LIB_NAMES})
         endif()
 
     find_library(FMT_${LIB}_LIB_DEBUG ${LIB}d
-        HINTS 
+        HINTS
         ${FMT_LOCATION}
         ${FMT_INCLUDE_DIR}/../debug
         ${FMT_INCLUDE_DIR}/..
@@ -82,4 +82,8 @@ iF (FMT_FOUND)
     set_target_properties(Fmt::Format PROPERTIES IMPORTED_IMPLIB_RELEASE ${fmt_LIBRARY})
     set_target_properties(Fmt::Format PROPERTIES IMPORTED_IMPLIB_DEBUG   ${fmt_LIBRARY_DEBUG})
     set_property(TARGET Fmt::Format APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${FMT_INCLUDE_DIR})
+
+    set_target_properties(Fmt::Format PROPERTIES
+                          MAP_IMPORTED_CONFIG_MINSIZEREL Release
+                          MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release)
 endif()
