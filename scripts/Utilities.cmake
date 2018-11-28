@@ -54,6 +54,7 @@ function(_lab_library_detail NAME)
     set(multiValueArgs
         PUBLIC_HEADERS
         PRIVATE_HEADERS
+        CFILES
         CPPFILES
         LIBRARIES
         INCLUDE_DIRS
@@ -96,6 +97,7 @@ function(_lab_library_detail NAME)
         # manually.  See pxr_monolithic_epilogue().
         add_library(${NAME}
             OBJECT
+            ${args_CFILES}
             ${args_CPPFILES}
             ${args_PUBLIC_HEADERS}
             ${args_PRIVATE_HEADERS}
@@ -105,6 +107,7 @@ function(_lab_library_detail NAME)
         # Building an explicitly static library.
         add_library(${NAME}
             STATIC
+            ${args_CFILES}
             ${args_CPPFILES}
             ${args_PUBLIC_HEADERS}
             ${args_PRIVATE_HEADERS}
@@ -114,6 +117,7 @@ function(_lab_library_detail NAME)
         # Building an explicitly shared library or plugin.
         add_library(${NAME}
             SHARED
+            ${args_CFILES}
             ${args_CPPFILES}
             ${args_PUBLIC_HEADERS}
             ${args_PRIVATE_HEADERS}
@@ -269,6 +273,7 @@ function(lab_library NAME)
     set(multiValueArgs
         PUBLIC_HEADERS
         PRIVATE_HEADERS
+        CFILES
         CPPFILES
         LIBRARIES
         INCLUDE_DIRS
@@ -324,6 +329,7 @@ function(lab_library NAME)
         SUFFIX "${suffix}"
         ALIAS "${args_ALIAS}"
         SUBDIR "${subdir}"
+        CFILES "${args_CFILES};${${NAME}_CFILES}"
         CPPFILES "${args_CPPFILES};${${NAME}_CPPFILES}"
         PUBLIC_HEADERS "${args_PUBLIC_HEADERS};${${NAME}_PUBLIC_HEADERS}"
         PRIVATE_HEADERS "${args_PRIVATE_HEADERS};${${NAME}_PRIVATE_HEADERS}"
