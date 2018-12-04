@@ -74,55 +74,24 @@ function(_lab_library_detail NAME)
     # Set up the target.
     #
 
-    # Note OBJECT and PLUGIN types.
-    set(isObject FALSE)
-    set(isPlugin FALSE)
-    if(args_TYPE STREQUAL "OBJECT" OR args_TYPE STREQUAL "OBJECT_PLUGIN")
-        set(isObject TRUE)
-    endif()
-    if(args_TYPE STREQUAL "PLUGIN" OR args_TYPE STREQUAL "OBJECT_PLUGIN")
-        set(isPlugin TRUE)
-    endif()
-
-    # Add the target.  We also add the headers because that's the easiest
-    # way to get them to appear in IDE projects.
-    if(isObject)
-        # When building a monolithic library we don't build individual
-        # static or shared libraries.  Instead we build OBJECT libraries
-        # which simply compile the sources.
-        #
-        # These can't be linked like other libraries and as a result we
-        # don't automatically get transitive compiler definitions,
-        # include directories or link libraries.  We have to do that
-        # manually.  See pxr_monolithic_epilogue().
-        add_library(${NAME}
-            OBJECT
-            ${args_CFILES}
-            ${args_CPPFILES}
-            ${args_PUBLIC_HEADERS}
-            ${args_PRIVATE_HEADERS}
-        )
-
+    if (args_TYPE STREQUAL "HEADERS")
+        set(libType "STATIC")
     elseif(args_TYPE STREQUAL "STATIC")
-        # Building an explicitly static library.
-        add_library(${NAME}
-            STATIC
-            ${args_CFILES}
-            ${args_CPPFILES}
-            ${args_PUBLIC_HEADERS}
-            ${args_PRIVATE_HEADERS}
-        )
-
+        set(libType "STATIC")
     else()
-        # Building an explicitly shared library or plugin.
-        add_library(${NAME}
-            SHARED
-            ${args_CFILES}
-            ${args_CPPFILES}
-            ${args_PUBLIC_HEADERS}
-            ${args_PRIVATE_HEADERS}
-        )
+        set(libType "SHARED")
     endif()
+
+    add_library(
+        ${NAME}
+        ${libType}
+        ${args_CFILES}
+        ${args_CPPFILES}
+        ${args_PUBLIC_HEADERS}
+        ${args_PRIVATE_HEADERS}
+    )
+
+    set_target_properties(${NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
     #
     # Compute names and paths.
@@ -153,8 +122,10 @@ function(_lab_library_detail NAME)
 
     # API macros.
     set(apiPublic "")
-    set(apiPrivate ${uppercaseName}_EXPORTS=1)
-    if(NOT _building_monolithic AND args_TYPE STREQUAL "STATIC")
+
+    if (args_TYPE STREQUAL "SHARED")
+        set(apiPrivate ${uppercaseName}_EXPORTS=1)
+    elseif(args_TYPE STREQUAL "STATIC")
         set(apiPublic LAB_STATIC=1)
     endif()
 
@@ -172,7 +143,8 @@ function(_lab_library_detail NAME)
     # We don't want to install the headers copied to the build tree
     # because they have #line directives embedded to aid in debugging.
     _get_folder("" folder)
-    set_target_properties(${NAME}
+    set_target_properties(
+        ${NAME}
         PROPERTIES
             FOLDER "${folder}"
             POSITION_INDEPENDENT_CODE ON
@@ -183,7 +155,8 @@ function(_lab_library_detail NAME)
             OUTPUT_NAME_DEBUG "${NAME}_d"
     )
 
-    target_compile_definitions(${NAME}
+    target_compile_definitions(
+        ${NAME}
         PUBLIC
             ${apiPublic}
             ${args_PUBLIC_DEFINITIONS}
@@ -259,7 +232,6 @@ endfunction() # _lab_library
 
 
 
-
 # adapted from pxr_library
 function(lab_library NAME)
     set(options
@@ -297,18 +269,6 @@ function(lab_library NAME)
         list(APPEND LAB_STATIC_LIBS ${NAME})
         set(LAB_STATIC_LIBS "${LAB_STATIC_LIBS}" CACHE INTERNAL "${help}")
    else()
-        # If the caller didn't specify the library type then choose the
-        # type now.
-        if("x${args_TYPE}" STREQUAL "x")
-            if(_building_monolithic)
-                set(args_TYPE "OBJECT")
-            elseif(BUILD_SHARED_LIBS)
-                set(args_TYPE "SHARED")
-            else()
-                set(args_TYPE "STATIC")
-            endif()
-        endif()
-
         set(prefix "${LAB_LIB_PREFIX}")
     endif()
 
